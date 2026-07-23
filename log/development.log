@@ -1,0 +1,331 @@
+  [1m[35m (10.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='RailsCloudApp'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='RailsCloudApp'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='RailsCloudApp'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2026-07-23 15:02:39.616891', '2026-07-23 15:02:39.616894') RETURNING "key" /*application='RailsCloudApp'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RailsCloudApp'*/[0m
+Migrating to CreateNotes (20260723150238)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='RailsCloudApp'*/[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "notes" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "body" text, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='RailsCloudApp'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260723150238') RETURNING "version" /*application='RailsCloudApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='RailsCloudApp'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RailsCloudApp'*/[0m
+Started GET "/up" for 127.0.0.1 at 2026-07-23 15:03:49 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RailsCloudApp'*/[0m
+Processing by Rails::HealthController#show as */*
+  Rendering html template
+  Rendered html template (Duration: 0.0ms | GC: 0.0ms)
+Completed 200 OK in 11ms (Views: 6.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-07-23 15:03:49 +0000
+Processing by WelcomeController#index as */*
+  [1m[36mNote Count (1.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "notes" /*action='index',application='RailsCloudApp',controller='welcome'*/[0m
+  ↳ app/controllers/welcome_controller.rb:3:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering welcome/index.html.erb within layouts/application
+  Rendered welcome/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.3ms | GC: 0.0ms)
+Completed 200 OK in 57ms (Views: 8.9ms | ActiveRecord: 2.0ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/up" for 127.0.0.1 at 2026-07-23 15:03:49 +0000
+Processing by Rails::HealthController#show as */*
+  Rendering html template
+  Rendered html template (Duration: 0.0ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/notes" for 127.0.0.1 at 2026-07-23 15:03:49 +0000
+Processing by NotesController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering notes/index.html.erb within layouts/application
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT "notes".* FROM "notes" /*action='index',application='RailsCloudApp',controller='notes'*/[0m
+  ↳ app/views/notes/index.html.erb:9
+  Rendered notes/index.html.erb within layouts/application (Duration: 1.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.6ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/notes" for 127.0.0.1 at 2026-07-23 15:03:49 +0000
+Processing by NotesController#create as */*
+  Parameters: {"note"=>{"title"=>"Hello", "body"=>"World"}}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in `handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in `handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in `verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in `block in make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in `block in call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in `block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in `call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `block in invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:119:in `block in run_callbacks'
+activesupport (8.1.3) lib/active_support/callbacks.rb:141:in `run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in `block in process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in `block in instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in `instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in `instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in `process_action'
+activerecord (8.1.3) lib/active_record/railties/controller_runtime.rb:39:in `process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in `process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in `process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in `dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in `dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in `dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in `serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in `block in serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in `block in recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in `each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in `recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in `serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in `call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in `call'
+rack (3.2.6) lib/rack/etag.rb:29:in `call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in `call'
+rack (3.2.6) lib/rack/head.rb:15:in `call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in `call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in `context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in `call'
+activerecord (8.1.3) lib/active_record/migration.rb:671:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+web-console (4.3.0) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.3.0) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.3.0) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.3.0) lib/web_console/middleware.rb:17:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in `call'
+propshaft (1.3.2) lib/propshaft/quiet_assets.rb:11:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.6) lib/rack/method_override.rb:28:in `call'
+rack (3.2.6) lib/rack/runtime.rb:24:in `call'
+activesupport (8.1.3) lib/active_support/cache/strategy/local_cache_middleware.rb:30:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in `call'
+propshaft (1.3.2) lib/propshaft/server.rb:37:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.1.3) lib/rails/engine.rb:534:in `call'
+puma (8.0.2) lib/puma/configuration.rb:305:in `call'
+puma (8.0.2) lib/puma/response.rb:79:in `block in handle_request'
+puma (8.0.2) lib/puma/thread_pool.rb:434:in `with_force_shutdown'
+puma (8.0.2) lib/puma/response.rb:78:in `handle_request'
+puma (8.0.2) lib/puma/server.rb:508:in `process_client'
+puma (8.0.2) lib/puma/server.rb:263:in `block in run'
+puma (8.0.2) lib/puma/thread_pool.rb:246:in `block in spawn_thread'
+Started GET "/" for 127.0.0.1 at 2026-07-23 15:03:49 +0000
+Processing by WelcomeController#index as */*
+  [1m[36mNote Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "notes" /*action='index',application='RailsCloudApp',controller='welcome'*/[0m
+  ↳ app/controllers/welcome_controller.rb:3:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering welcome/index.html.erb within layouts/application
+  Rendered welcome/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.6ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 1.0ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/up" for 127.0.0.1 at 2026-07-23 15:10:06 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RailsCloudApp'*/[0m
+Processing by Rails::HealthController#show as */*
+  Rendering html template
+  Rendered html template (Duration: 0.1ms | GC: 0.0ms)
+Completed 200 OK in 13ms (Views: 5.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/notes" for 127.0.0.1 at 2026-07-23 15:10:07 +0000
+Processing by NotesController#create as */*
+  Parameters: {"note"=>{"title"=>"x", "body"=>"y"}}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in `handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in `handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in `verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in `block in make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in `block in call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in `block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in `call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `block in invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:119:in `block in run_callbacks'
+activesupport (8.1.3) lib/active_support/callbacks.rb:141:in `run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in `block in process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in `block in instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in `instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in `instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in `process_action'
+activerecord (8.1.3) lib/active_record/railties/controller_runtime.rb:39:in `process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in `process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in `process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in `dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in `dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in `dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in `serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in `block in serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in `block in recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in `each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in `recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in `serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in `call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in `call'
+rack (3.2.6) lib/rack/etag.rb:29:in `call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in `call'
+rack (3.2.6) lib/rack/head.rb:15:in `call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in `call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in `context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in `call'
+activerecord (8.1.3) lib/active_record/migration.rb:671:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+web-console (4.3.0) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.3.0) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.3.0) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.3.0) lib/web_console/middleware.rb:17:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in `call'
+propshaft (1.3.2) lib/propshaft/quiet_assets.rb:11:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.6) lib/rack/method_override.rb:28:in `call'
+rack (3.2.6) lib/rack/runtime.rb:24:in `call'
+activesupport (8.1.3) lib/active_support/cache/strategy/local_cache_middleware.rb:30:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in `call'
+propshaft (1.3.2) lib/propshaft/server.rb:37:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.1.3) lib/rails/engine.rb:534:in `call'
+puma (8.0.2) lib/puma/configuration.rb:305:in `call'
+puma (8.0.2) lib/puma/response.rb:79:in `block in handle_request'
+puma (8.0.2) lib/puma/thread_pool.rb:434:in `with_force_shutdown'
+puma (8.0.2) lib/puma/response.rb:78:in `handle_request'
+puma (8.0.2) lib/puma/server.rb:508:in `process_client'
+puma (8.0.2) lib/puma/server.rb:263:in `block in run'
+puma (8.0.2) lib/puma/thread_pool.rb:246:in `block in spawn_thread'
+Started POST "/notes" for 127.0.0.1 at 2026-07-23 15:10:07 +0000
+Processing by NotesController#create as */*
+  Parameters: {"note"=>{"title"=>"x", "body"=>"y"}}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in `handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in `handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in `verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in `block in make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in `block in call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in `block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in `call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `block in invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in `invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:119:in `block in run_callbacks'
+activesupport (8.1.3) lib/active_support/callbacks.rb:141:in `run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in `block in process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in `block in instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in `instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in `instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in `process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in `process_action'
+activerecord (8.1.3) lib/active_record/railties/controller_runtime.rb:39:in `process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in `process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in `process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in `dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in `dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in `dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in `serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in `block in serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in `block in recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in `each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in `recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in `serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in `call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in `call'
+rack (3.2.6) lib/rack/etag.rb:29:in `call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in `call'
+rack (3.2.6) lib/rack/head.rb:15:in `call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in `call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in `context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in `call'
+activerecord (8.1.3) lib/active_record/migration.rb:671:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+web-console (4.3.0) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.3.0) lib/web_console/middleware.rb:28:in `block in call'
+web-console (4.3.0) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.3.0) lib/web_console/middleware.rb:17:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in `call'
+propshaft (1.3.2) lib/propshaft/quiet_assets.rb:11:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.6) lib/rack/method_override.rb:28:in `call'
+rack (3.2.6) lib/rack/runtime.rb:24:in `call'
+activesupport (8.1.3) lib/active_support/cache/strategy/local_cache_middleware.rb:30:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.1.3) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in `call'
+propshaft (1.3.2) lib/propshaft/server.rb:37:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.1.3) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.1.3) lib/rails/engine.rb:534:in `call'
+puma (8.0.2) lib/puma/configuration.rb:305:in `call'
+puma (8.0.2) lib/puma/response.rb:79:in `block in handle_request'
+puma (8.0.2) lib/puma/thread_pool.rb:434:in `with_force_shutdown'
+puma (8.0.2) lib/puma/response.rb:78:in `handle_request'
+puma (8.0.2) lib/puma/server.rb:508:in `process_client'
+puma (8.0.2) lib/puma/server.rb:263:in `block in run'
+puma (8.0.2) lib/puma/thread_pool.rb:246:in `block in spawn_thread'
