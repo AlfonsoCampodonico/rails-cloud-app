@@ -39,4 +39,10 @@ class NotesApiTest < ActionDispatch::IntegrationTest
     get "/notes/999", as: :json
     assert_response :not_found
   end
+
+  test "root serves the html frontend" do
+    get "/"
+    assert_response :success
+    assert_match "id=\"note-form\"", response.body
+  end
 end
