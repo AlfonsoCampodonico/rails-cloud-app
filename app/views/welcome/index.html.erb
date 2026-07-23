@@ -1,43 +1,98 @@
-<div class="welcome">
-  <h1>🚀 Rails on the Cloud</h1>
-  <p class="lede">
-    A minimal Rails <%= Rails.version %> app, containerized and ready to deploy.
-  </p>
+<div class="app">
+  <h1>🚀 Notes</h1>
+  <p class="lede">In-memory notes served by Rails, driven entirely by <code>fetch()</code>. Notes reset when the server restarts.</p>
 
-  <div class="cards">
-    <div class="card">
-      <h2>Notes</h2>
-      <p>A working, database-backed resource (SQLite).</p>
-      <p class="count"><%= @notes_count %> note<%= "s" unless @notes_count == 1 %> so far.</p>
-      <%= link_to "Open Notes →", notes_path, class: "btn" %>
-    </div>
+  <form id="note-form" data-turbo="false" autocomplete="off">
+    <input type="text" name="title" placeholder="Title" required>
+    <textarea name="body" placeholder="Body (optional)" rows="2"></textarea>
+    <button type="submit">Add note</button>
+    <span id="error" class="error" role="alert"></span>
+  </form>
 
-    <div class="card">
-      <h2>Health check</h2>
-      <p>Load balancers and uptime monitors hit this endpoint.</p>
-      <%= link_to "GET /up →", rails_health_check_path, class: "btn btn-secondary" %>
-    </div>
-  </div>
-
-  <footer class="env">
-    <span>Ruby <%= RUBY_VERSION %></span>
-    <span>Rails <%= Rails.version %></span>
-    <span>Env: <%= Rails.env %></span>
-  </footer>
+  <ul id="notes" class="notes"></ul>
 </div>
 
+<script type="module">
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+  const list = document.getElementById("notes");
+  const form = document.getElementById("note-form");
+  const errorBox = document.getElementById("error");
+
+  async function api(url, options = {}) {
+    return fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      ...options,
+    });
+  }
+
+  function render(notes) {
+    list.replaceChildren();
+    for (const note of notes) {
+      const li = document.createElement("li");
+      const title = document.createElement("strong");
+      title.textContent = note.title;
+      const body = document.createElement("p");
+      body.textContent = note.body || "";
+      const del = document.createElement("button");
+      del.textContent = "Delete";
+      del.addEventListener("click", () => remove(note.id));
+      li.append(title, body, del);
+      list.append(li);
+    }
+  }
+
+  async function load() {
+    const res = await api("/notes");
+    render(await res.json());
+  }
+
+  async function add(title, body) {
+    const res = await api("/notes", {
+      method: "POST",
+      body: JSON.stringify({ note: { title, body } }),
+    });
+    if (res.status === 422) {
+      const data = await res.json();
+      errorBox.textContent = "Title " + (data.errors?.title?.[0] || "is invalid");
+      return false;
+    }
+    errorBox.textContent = "";
+    return res.ok;
+  }
+
+  async function remove(id) {
+    await api(`/notes/${id}`, { method: "DELETE" });
+    load();
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const title = form.title.value.trim();
+    const body = form.body.value.trim();
+    if (await add(title, body)) {
+      form.reset();
+      load();
+    }
+  });
+
+  load();
+</script>
+
 <style>
-  .welcome { max-width: 720px; margin: 4rem auto; padding: 0 1.5rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1f2937; }
-  .welcome h1 { font-size: 2.25rem; margin-bottom: .5rem; }
-  .lede { font-size: 1.125rem; color: #6b7280; margin-bottom: 2.5rem; }
-  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-  .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; background: #fff; }
-  .card h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
-  .card p { color: #4b5563; margin: 0 0 .75rem; font-size: .95rem; }
-  .count { font-weight: 600; color: #111827; }
-  .btn { display: inline-block; padding: .5rem 1rem; border-radius: 8px; background: #ef4444; color: #fff; text-decoration: none; font-size: .9rem; }
-  .btn-secondary { background: #374151; }
-  .env { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; font-size: .8rem; color: #9ca3af; }
-  .env span { background: #f3f4f6; padding: .25rem .6rem; border-radius: 6px; }
-  @media (max-width: 560px) { .cards { grid-template-columns: 1fr; } }
+  .app { max-width: 640px; margin: 3rem auto; padding: 0 1.5rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1f2937; }
+  .app h1 { font-size: 2rem; margin-bottom: .25rem; }
+  .lede { color: #6b7280; margin-bottom: 2rem; }
+  #note-form { display: grid; gap: .5rem; margin-bottom: 2rem; }
+  #note-form input, #note-form textarea { padding: .6rem; border: 1px solid #d1d5db; border-radius: 8px; font: inherit; }
+  #note-form button { justify-self: start; padding: .5rem 1rem; border: 0; border-radius: 8px; background: #ef4444; color: #fff; font-size: .9rem; cursor: pointer; }
+  .error { color: #b91c1c; font-size: .85rem; }
+  .notes { list-style: none; padding: 0; display: grid; gap: .75rem; }
+  .notes li { border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; background: #fff; }
+  .notes strong { display: block; margin-bottom: .25rem; }
+  .notes p { margin: 0 0 .5rem; color: #4b5563; white-space: pre-wrap; }
+  .notes button { border: 0; background: none; color: #ef4444; cursor: pointer; padding: 0; font-size: .85rem; }
 </style>
