@@ -25,7 +25,7 @@ class NotesController < ApplicationController
     when nil
       render_not_found
     when :invalid
-      render json: { errors: { title: [ "can't be blank" ] } }, status: :unprocessable_content
+      render json: { errors: Note::BLANK_TITLE_ERRORS }, status: :unprocessable_content
     else
       render json: result
     end

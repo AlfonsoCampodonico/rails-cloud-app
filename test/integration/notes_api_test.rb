@@ -40,6 +40,25 @@ class NotesApiTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "update for a missing id returns 404" do
+    patch "/notes/999", params: { note: { title: "X" } }, as: :json
+    assert_response :not_found
+  end
+
+  test "update with a blank title returns 422 with errors" do
+    post "/notes", params: { note: { title: "Keep" } }, as: :json
+    id = JSON.parse(response.body)["id"]
+
+    patch "/notes/#{id}", params: { note: { title: "  " } }, as: :json
+    assert_response :unprocessable_content
+    assert_not_empty JSON.parse(response.body)["errors"]["title"]
+  end
+
+  test "destroy for a missing id returns 404" do
+    delete "/notes/999", as: :json
+    assert_response :not_found
+  end
+
   test "root serves the html frontend" do
     get "/"
     assert_response :success
