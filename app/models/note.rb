@@ -1,10 +1,19 @@
+# In-memory note store. Intentionally non-persistent (state lives only in the
+# running process and resets on restart) and NOT thread-safe: the class-level
+# @notes array and @next_id counter are mutated without locking. This is fine
+# for the single-worker demo it was built for; it is not production storage.
 class Note
+  # Shared so the model and controller report an identical validation error.
+  BLANK_TITLE_ERRORS = { title: [ "can't be blank" ] }.freeze
+
   @notes = []
   @next_id = 0
 
   class << self
     def all
-      @notes.sort_by(&:created_at).reverse
+      # Sort by id (strictly monotonic) rather than created_at so ordering is
+      # deterministic even when two notes share a Time.now tick.
+      @notes.sort_by(&:id).reverse
     end
 
     def find(id)
@@ -63,7 +72,7 @@ class Note
   def errors_hash
     return {} if valid?
 
-    { title: [ "can't be blank" ] }
+    BLANK_TITLE_ERRORS
   end
 
   def as_json(*)

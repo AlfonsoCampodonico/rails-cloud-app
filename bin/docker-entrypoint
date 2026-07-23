@@ -1,8 +1,6 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
-fi
+# This app has no database — notes are held in memory — so there is no
+# db:prepare step here.
 
 exec "${@}"

@@ -43,4 +43,17 @@ class NoteTest < ActiveSupport::TestCase
     second = Note.create(title: "second")
     assert_equal [ second.id, first.id ], Note.all.map(&:id)
   end
+
+  test "errors_hash is empty when valid and reports a blank title otherwise" do
+    assert_empty Note.new(title: "Present").errors_hash
+    assert_equal [ "can't be blank" ], Note.new(title: " ").errors_hash[:title]
+  end
+
+  test "find, update, and destroy coerce string ids" do
+    note = Note.create(title: "A")
+    assert_equal note.id, Note.find(note.id.to_s).id
+    assert_equal "B", Note.update(note.id.to_s, title: "B").title
+    assert Note.destroy(note.id.to_s)
+    assert_equal 0, Note.all.size
+  end
 end

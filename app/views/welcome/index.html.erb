@@ -18,15 +18,19 @@
   const form = document.getElementById("note-form");
   const errorBox = document.getElementById("error");
 
+  function showError(message) {
+    errorBox.textContent = message;
+  }
+
   async function api(url, options = {}) {
-    return fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "X-CSRF-Token": csrfToken,
-      },
-      ...options,
-    });
+    const headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    };
+    // Only send the token when present, so a missing meta tag fails loudly
+    // rather than sending the literal string "undefined".
+    if (csrfToken) headers["X-CSRF-Token"] = csrfToken;
+    return fetch(url, { headers, ...options });
   }
 
   function render(notes) {
@@ -46,8 +50,13 @@
   }
 
   async function load() {
-    const res = await api("/notes");
-    render(await res.json());
+    try {
+      const res = await api("/notes");
+      if (!res.ok) return showError("Could not load notes.");
+      render(await res.json());
+    } catch {
+      showError("Network error — could not reach the server.");
+    }
   }
 
   async function add(title, body) {
@@ -57,25 +66,38 @@
     });
     if (res.status === 422) {
       const data = await res.json();
-      errorBox.textContent = "Title " + (data.errors?.title?.[0] || "is invalid");
+      showError("Title " + (data.errors?.title?.[0] || "is invalid"));
       return false;
     }
-    errorBox.textContent = "";
-    return res.ok;
+    if (!res.ok) {
+      showError(`Could not save note (server error ${res.status}).`);
+      return false;
+    }
+    showError("");
+    return true;
   }
 
   async function remove(id) {
-    await api(`/notes/${id}`, { method: "DELETE" });
-    load();
+    try {
+      const res = await api(`/notes/${id}`, { method: "DELETE" });
+      if (!res.ok) return showError("Could not delete note.");
+      load();
+    } catch {
+      showError("Network error — could not reach the server.");
+    }
   }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const title = form.title.value.trim();
     const body = form.body.value.trim();
-    if (await add(title, body)) {
-      form.reset();
-      load();
+    try {
+      if (await add(title, body)) {
+        form.reset();
+        load();
+      }
+    } catch {
+      showError("Network error — could not reach the server.");
     }
   });
 
